@@ -23,11 +23,15 @@ public class GradientLabel: UILabel {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
+        guard bounds.width * bounds.height > 0 else { return }
+
         UIGraphicsBeginImageContext(frame.size)
         gradientImage.draw(in: bounds)
-        let myGradient = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
 
-        textColor = UIColor(patternImage: myGradient!)
+        defer { UIGraphicsEndImageContext() }
+
+        guard let myGradient = UIGraphicsGetImageFromCurrentImageContext() else { return }
+
+        textColor = UIColor(patternImage: myGradient)
     }
 }
